@@ -1,0 +1,2 @@
+# For the first part of the server I need it to register the agent in a database. It seems that the uuid.UUID module will create a unique string for a computer that can be
+# re-ran and give the same result. I will have to do more research on how this can change. 

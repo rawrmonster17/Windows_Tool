@@ -1,6 +1,8 @@
 import string
 import os
 import fnmatch
+import uuid
+import winreg
 
 class Logging:
 
@@ -12,13 +14,16 @@ class Logging:
         # function but defently in this class
         pass
 
-class Health:
+class Computer:
 
     def __init__(self) -> None:
+        self.agent_uuid = None
+
+    def get_uuid(self):
+        # This function should first try to see if there is a uuid in registry and if not create one and pass it to the registry.
         pass
 
-    def get_event_logs(self):
-        # I don't have time to look at this yet but this seems promising https://www.blog.pythonlibrary.org/2010/07/27/pywin32-getting-windows-event-logs/
+    def get_registry_value(self, Hive, Key):
         pass
 
 class Malicious:
@@ -51,6 +56,7 @@ class Malicious:
                                     print("I am not sure what happened here. But I am going to creat a logging function to handle stuff like this")                          
 
     def find_all_connected_drives(self):
+        # I am not sure I like this method here. I really should put this in the Computer class but I need to find a way to pass the information to this class when it is created.
         all_lower_case_letters_list = list(string.ascii_lowercase)
         for letter in all_lower_case_letters_list:
             letter = letter + ":\\"
