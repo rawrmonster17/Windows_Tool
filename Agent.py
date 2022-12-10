@@ -3,11 +3,13 @@ import os
 import fnmatch
 import uuid
 import winreg
+import platform
+
 
 class Logging:
 
     def __init__(self) -> None:
-        self.logfile_location = None
+        self.logfile_location = "C:\\Windows"
     
     def set_logging_location(self):
         # For this function I want it to be able to be to check size of log location left, and be able to log rotate. Maybe not all in this
@@ -54,6 +56,7 @@ class Computer:
                     key_obj = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, Key, reserved=0, access=winreg.KEY_ALL_ACCESS)
                 except PermissionError:
                     print("Write to log once the function is completed")
+                    return False
         else:
             try:
                 key_obj = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, Key, reserved=0, access=winreg.KEY_ALL_ACCESS)
